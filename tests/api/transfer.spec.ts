@@ -3,7 +3,9 @@ import { AccountClient } from '../../src/api/clients/accountClient';
 import { createTwoUsersForTransfer } from '../../src/steps/userSteps';
 
 test.describe('Transfer API', () => {
-  test('user can transfer money to another user account', async ({ request }) => {
+  test('@regression user can transfer money to another user account', async ({
+    request,
+  }) => {
     const { sender, receiver } = await createTwoUsersForTransfer(request, 100);
     const accountClient = new AccountClient(
       request,

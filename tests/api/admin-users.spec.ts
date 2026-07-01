@@ -15,7 +15,7 @@ interface InvalidUserCase {
 }
 
 test.describe('Admin users API', () => {
-  test('admin can create user with valid data', async ({ request }) => {
+  test('@smoke admin can create user with valid data', async ({ request }) => {
     const user = await createUser(request);
 
     expect(user.response.id).toEqual(expect.any(Number));
@@ -47,7 +47,7 @@ test.describe('Admin users API', () => {
   ];
 
   for (const invalidUser of invalidUsers) {
-    test(invalidUser.title, async ({ request }) => {
+    test(`@regression ${invalidUser.title}`, async ({ request }) => {
       const adminClient = new AdminClient(request);
 
       const error = await adminClient.createUserExpectBadRequest(
@@ -58,7 +58,9 @@ test.describe('Admin users API', () => {
     });
   }
 
-  test('admin cannot create duplicate user', async ({ request }) => {
+  test('@regression admin cannot create duplicate user', async ({
+    request,
+  }) => {
     const adminClient = new AdminClient(request);
     const userData = createUserData();
 

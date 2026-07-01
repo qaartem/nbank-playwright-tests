@@ -5,6 +5,10 @@ import type {
   UpdateCustomerProfileRequest,
   UpdateCustomerProfileResponse,
 } from '../../models';
+import {
+  customerProfileResponseSchema,
+  updateCustomerProfileResponseSchema,
+} from '../../schemas/apiSchemas';
 import { buildUnexpectedStatusError } from '../../utils/apiDiagnostics';
 import { basicAuth } from '../../utils/auth';
 
@@ -23,7 +27,9 @@ export class ProfileClient {
 
     await this.expectStatus(response, 200, headers);
 
-    return response.json() as Promise<CustomerProfileResponse>;
+    const body = await response.json();
+
+    return customerProfileResponseSchema.parse(body) as CustomerProfileResponse;
   }
 
   async updateProfile(
@@ -37,7 +43,11 @@ export class ProfileClient {
 
     await this.expectStatus(response, 200, headers);
 
-    return response.json() as Promise<UpdateCustomerProfileResponse>;
+    const body = await response.json();
+
+    return updateCustomerProfileResponseSchema.parse(
+      body,
+    ) as UpdateCustomerProfileResponse;
   }
 
   private userHeaders(): Record<string, string> {

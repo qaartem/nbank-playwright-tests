@@ -3,7 +3,7 @@ import { ProfileClient } from '../../src/api/clients/profileClient';
 import { createUser } from '../../src/steps/adminSteps';
 
 test.describe('Profile API', () => {
-  test('user can update own profile name', async ({ request }) => {
+  test('@regression user can update own profile name', async ({ request }) => {
     const user = await createUser(request);
     const profileClient = new ProfileClient(
       request,

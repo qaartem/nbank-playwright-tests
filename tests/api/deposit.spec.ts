@@ -2,7 +2,9 @@ import { expect, test } from '@playwright/test';
 import { createUserWithAccountAndBalance } from '../../src/steps/userSteps';
 
 test.describe('Deposit API', () => {
-  test('user can deposit money to own account', async ({ request }) => {
+  test('@regression user can deposit money to own account', async ({
+    request,
+  }) => {
     const user = await createUserWithAccountAndBalance(request, 100);
 
     expect(user.account.id).toEqual(expect.any(Number));

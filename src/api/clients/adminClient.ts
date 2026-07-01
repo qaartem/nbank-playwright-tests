@@ -6,6 +6,7 @@ import type {
   CreateUserResponse,
   ErrorResponse,
 } from '../../models';
+import { createUserResponseSchema } from '../../schemas/apiSchemas';
 import { buildUnexpectedStatusError } from '../../utils/apiDiagnostics';
 import { basicAuth } from '../../utils/auth';
 
@@ -21,12 +22,12 @@ export class AdminClient {
 
     await this.expectStatus(response, 201, headers);
 
-    return response.json() as Promise<CreateUserResponse>;
+    const body = await response.json();
+
+    return createUserResponseSchema.parse(body) as CreateUserResponse;
   }
 
-  async createUserExpectBadRequest(
-    data: object,
-  ): Promise<ErrorResponse> {
+  async createUserExpectBadRequest(data: object): Promise<ErrorResponse> {
     const headers = this.adminHeaders();
     const response = await this.request.post(endpoints.adminUsers, {
       headers,

@@ -3,7 +3,6 @@ import { AccountClient } from '../api/clients/accountClient';
 import type {
   CreateAccountResponse,
   CreateUserRequest,
-  CreateUserResponse,
   DepositResponse,
 } from '../models';
 import { createUser, type CreatedUser } from './adminSteps';

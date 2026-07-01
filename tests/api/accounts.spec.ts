@@ -3,7 +3,7 @@ import { AccountClient } from '../../src/api/clients/accountClient';
 import { createUserWithAccount } from '../../src/steps/userSteps';
 
 test.describe('Accounts API', () => {
-  test('user can create account and see it in customer accounts', async ({
+  test('@smoke user can create account and see it in customer accounts', async ({
     request,
   }) => {
     const user = await createUserWithAccount(request);

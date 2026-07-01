@@ -8,6 +8,10 @@ import type {
   TransferRequest,
   TransferResponse,
 } from '../../models';
+import {
+  accountResponseSchema,
+  transferResponseSchema,
+} from '../../schemas/apiSchemas';
 import { buildUnexpectedStatusError } from '../../utils/apiDiagnostics';
 import { basicAuth } from '../../utils/auth';
 
@@ -26,7 +30,9 @@ export class AccountClient {
 
     await this.expectStatus(response, 201, headers);
 
-    return response.json() as Promise<CreateAccountResponse>;
+    const body = await response.json();
+
+    return accountResponseSchema.parse(body) as CreateAccountResponse;
   }
 
   async getCustomerAccounts(): Promise<CustomerAccountResponse[]> {
@@ -37,7 +43,11 @@ export class AccountClient {
 
     await this.expectStatus(response, 200, headers);
 
-    return response.json() as Promise<CustomerAccountResponse[]>;
+    const body = await response.json();
+
+    return accountResponseSchema
+      .array()
+      .parse(body) as CustomerAccountResponse[];
   }
 
   async deposit(data: DepositRequest): Promise<DepositResponse> {
@@ -49,7 +59,9 @@ export class AccountClient {
 
     await this.expectStatus(response, 200, headers);
 
-    return response.json() as Promise<DepositResponse>;
+    const body = await response.json();
+
+    return accountResponseSchema.parse(body) as DepositResponse;
   }
 
   async transfer(data: TransferRequest): Promise<TransferResponse> {
@@ -61,7 +73,9 @@ export class AccountClient {
 
     await this.expectStatus(response, 200, headers);
 
-    return response.json() as Promise<TransferResponse>;
+    const body = await response.json();
+
+    return transferResponseSchema.parse(body) as TransferResponse;
   }
 
   private userHeaders(): Record<string, string> {
