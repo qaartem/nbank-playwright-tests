@@ -1,0 +1,13 @@
+name: nbank-playwright-api
+
+services:
+  backend:
+    image: nobugsme/nbank:with_username_error_fix
+    ports:
+      - "4111:4111"
+    networks:
+      - nbank-network
+
+networks:
+  nbank-network:
+    name: nbank-playwright-api-network

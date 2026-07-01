@@ -8,7 +8,9 @@
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
     "report": "playwright show-report",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "docker:up": "docker compose -f infra/docker_compose/docker-compose.yml up -d",
+    "docker:down": "docker compose -f infra/docker_compose/docker-compose.yml down"
   },
   "keywords": [],
   "author": "",
