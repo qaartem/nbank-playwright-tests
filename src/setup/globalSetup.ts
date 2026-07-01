@@ -1,4 +1,5 @@
 import { request } from '@playwright/test';
+import { endpoints } from '../api/endpoints';
 import { apiUrl, env } from '../config/env';
 
 const readinessTimeoutMs = 60_000;
@@ -16,7 +17,7 @@ async function globalSetup(): Promise<void> {
   try {
     while (Date.now() - startedAt < readinessTimeoutMs) {
       try {
-        const response = await context.post('auth/login', {
+        const response = await context.post(endpoints.login, {
           data: {
             username: env.adminUsername,
             password: env.adminPassword,
