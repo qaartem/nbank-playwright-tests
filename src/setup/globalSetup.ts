@@ -1,6 +1,7 @@
 import { request } from '@playwright/test';
 import { endpoints } from '../api/endpoints';
 import { apiUrl, env } from '../config/env';
+import { basicAuth } from '../utils/auth';
 
 const readinessTimeoutMs = 60_000;
 const readinessIntervalMs = 1_000;
@@ -18,6 +19,9 @@ async function globalSetup(): Promise<void> {
     while (Date.now() - startedAt < readinessTimeoutMs) {
       try {
         const response = await context.post(endpoints.login, {
+          headers: {
+            Authorization: basicAuth(env.adminUsername, env.adminPassword),
+          },
           data: {
             username: env.adminUsername,
             password: env.adminPassword,
