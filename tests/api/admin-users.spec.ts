@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { AdminClient } from '../../src/api/clients/adminClient';
 import { createUserData } from '../../src/data/userFactory';
 import type { CreateUserRequest } from '../../src/models';
+import { createUser } from '../../src/steps/adminSteps';
 
 type InvalidCreateUserRequest = Omit<CreateUserRequest, 'role'> & {
   role: string;
@@ -15,14 +16,11 @@ interface InvalidUserCase {
 
 test.describe('Admin users API', () => {
   test('admin can create user with valid data', async ({ request }) => {
-    const adminClient = new AdminClient(request);
-    const userData = createUserData();
+    const user = await createUser(request);
 
-    const createdUser = await adminClient.createUser(userData);
-
-    expect(createdUser.id).toEqual(expect.any(Number));
-    expect(createdUser.username).toBe(userData.username);
-    expect(createdUser.role).toBe(userData.role);
+    expect(user.response.id).toEqual(expect.any(Number));
+    expect(user.response.username).toBe(user.request.username);
+    expect(user.response.role).toBe(user.request.role);
   });
 
   const invalidUsers: InvalidUserCase[] = [
