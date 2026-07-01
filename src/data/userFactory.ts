@@ -1,10 +1,11 @@
 import type { CreateUserRequest } from '../models';
 
 export const uniqueUsername = (prefix = 'user'): string => {
-  const timestamp = Date.now();
-  const randomSuffix = Math.random().toString(36).slice(2, 8);
+  const normalizedPrefix = prefix.replace(/[^a-zA-Z0-9]/g, '').slice(0, 4);
+  const timestamp = Date.now().toString(36).slice(-6);
+  const randomSuffix = Math.random().toString(36).slice(2, 6);
 
-  return `${prefix}_${timestamp}_${randomSuffix}`;
+  return `${normalizedPrefix}_${timestamp}${randomSuffix}`;
 };
 
 export const validPassword = (): string => 'VeryStrongPassword33$';
