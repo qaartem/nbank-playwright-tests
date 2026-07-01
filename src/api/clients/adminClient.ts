@@ -6,18 +6,20 @@ import type {
   CreateUserResponse,
   ErrorResponse,
 } from '../../models';
+import { buildUnexpectedStatusError } from '../../utils/apiDiagnostics';
 import { basicAuth } from '../../utils/auth';
 
 export class AdminClient {
   constructor(private readonly request: APIRequestContext) {}
 
   async createUser(data: CreateUserRequest): Promise<CreateUserResponse> {
+    const headers = this.adminHeaders();
     const response = await this.request.post(endpoints.adminUsers, {
-      headers: this.adminHeaders(),
+      headers,
       data,
     });
 
-    await this.expectStatus(response, 201);
+    await this.expectStatus(response, 201, headers);
 
     return response.json() as Promise<CreateUserResponse>;
   }
@@ -25,13 +27,14 @@ export class AdminClient {
   async createUserExpectBadRequest(
     data: object,
   ): Promise<ErrorResponse> {
+    const headers = this.adminHeaders();
     const response = await this.request.post(endpoints.adminUsers, {
-      headers: this.adminHeaders(),
+      headers,
       data,
       failOnStatusCode: false,
     });
 
-    await this.expectStatus(response, 400);
+    await this.expectStatus(response, 400, headers);
 
     return this.parseErrorResponse(response);
   }
@@ -45,16 +48,13 @@ export class AdminClient {
   private async expectStatus(
     response: APIResponse,
     expectedStatus: number,
+    headers: Record<string, string>,
   ): Promise<void> {
     if (response.status() === expectedStatus) {
       return;
     }
 
-    const responseBody = await response.text();
-
-    throw new Error(
-      `Expected ${expectedStatus} but received ${response.status()} ${response.statusText()}: ${responseBody}`,
-    );
+    throw await buildUnexpectedStatusError(response, expectedStatus, headers);
   }
 
   private async parseErrorResponse(
