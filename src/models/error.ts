@@ -4,4 +4,5 @@ export interface ErrorResponse {
   message?: string;
   path?: string;
   timestamp?: string;
+  [field: string]: string[] | string | number | undefined;
 }

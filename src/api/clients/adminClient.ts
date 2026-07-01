@@ -23,7 +23,7 @@ export class AdminClient {
   }
 
   async createUserExpectBadRequest(
-    data: CreateUserRequest,
+    data: object,
   ): Promise<ErrorResponse> {
     const response = await this.request.post(endpoints.adminUsers, {
       headers: this.adminHeaders(),
@@ -33,7 +33,7 @@ export class AdminClient {
 
     await this.expectStatus(response, 400);
 
-    return response.json() as Promise<ErrorResponse>;
+    return this.parseErrorResponse(response);
   }
 
   private adminHeaders(): Record<string, string> {
@@ -55,5 +55,17 @@ export class AdminClient {
     throw new Error(
       `Expected ${expectedStatus} but received ${response.status()} ${response.statusText()}: ${responseBody}`,
     );
+  }
+
+  private async parseErrorResponse(
+    response: APIResponse,
+  ): Promise<ErrorResponse> {
+    const responseBody = await response.text();
+
+    try {
+      return JSON.parse(responseBody) as ErrorResponse;
+    } catch {
+      return { message: responseBody };
+    }
   }
 }
