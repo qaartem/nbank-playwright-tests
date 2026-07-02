@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import { apiUrl, env } from './src/config/env';
 
 export default defineConfig({
@@ -22,4 +22,34 @@ export default defineConfig({
     },
     trace: 'on-first-retry',
   },
+  projects: [
+    {
+      name: 'api',
+      testMatch: /api\/.*\.spec\.ts/,
+    },
+    {
+      name: 'chromium',
+      testMatch: /ui\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.frontendBaseUrl,
+      },
+    },
+    {
+      name: 'firefox',
+      testMatch: /ui\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Firefox'],
+        baseURL: env.frontendBaseUrl,
+      },
+    },
+    {
+      name: 'webkit',
+      testMatch: /ui\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Safari'],
+        baseURL: env.frontendBaseUrl,
+      },
+    },
+  ],
 });

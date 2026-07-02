@@ -61,9 +61,17 @@ src/models           TypeScript DTO
 src/schemas          zod validation schemas
 src/setup            Playwright global setup
 src/steps            reusable test steps
+src/ui/pages         future UI Page Objects
 src/utils            auth и diagnostics helpers
 tests/api            API specs
+tests/ui             future UI specs
 ```
+
+## API и будущий UI
+
+API clients и steps остаются переиспользуемыми. Будущие UI-тесты должны готовить данные через API-слой, а действия в браузере держать в Page Objects внутри `src/ui/pages`.
+
+API clients не должны импортировать Page Objects. Page Objects не должны содержать backend-запросы.
 
 ## Отчеты
 
